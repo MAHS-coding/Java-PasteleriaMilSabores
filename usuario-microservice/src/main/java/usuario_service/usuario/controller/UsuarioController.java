@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import usuario_service.usuario.dto.UsuarioRequestDTO;
 import usuario_service.usuario.dto.UsuarioResponseDTO;
-import usuario_service.usuario.service.UsuarioService;
+import usuario_service.usuario.service.Impl.UsuarioServiceImpl;
 
 
 
@@ -24,7 +24,7 @@ import usuario_service.usuario.service.UsuarioService;
 @RequestMapping("/usuarios")
 public class UsuarioController {
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioServiceImpl usuarioService;
 
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> crearUsuario(@RequestBody UsuarioRequestDTO dto) {
