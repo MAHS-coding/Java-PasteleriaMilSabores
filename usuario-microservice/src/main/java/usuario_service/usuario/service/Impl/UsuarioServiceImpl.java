@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import usuario_service.usuario.dto.RolDTO;
 import usuario_service.usuario.dto.UsuarioRequestDTO;
 import usuario_service.usuario.dto.UsuarioResponseDTO;
-import usuario_service.usuario.entity.Rol;
-import usuario_service.usuario.entity.Usuario;
+import usuario_service.usuario.entity.RolEntity;
+import usuario_service.usuario.entity.UsuarioEntity;
 import usuario_service.usuario.repository.RolRepository;
 import usuario_service.usuario.repository.UsuarioRepository;
 import usuario_service.usuario.service.UsuarioService;
@@ -22,7 +22,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private RolRepository rolRepository;
 
-    private UsuarioResponseDTO mapToResponseDTO(Usuario usuario) {
+    private UsuarioResponseDTO mapToResponseDTO(UsuarioEntity usuario) {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
         dto.setId(usuario.getId());
         dto.setNombre(usuario.getNombre());
@@ -35,21 +35,21 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO requestDTO) {
-        Usuario usuario = new Usuario();
+        UsuarioEntity usuario = new UsuarioEntity();
         usuario.setNombre(requestDTO.getNombre());
         usuario.setEmail(requestDTO.getEmail());
         usuario.setPassword(requestDTO.getPassword());
-        Rol rol = new Rol();
+        RolEntity rol = new RolEntity();
         rol.setId(requestDTO.getRolId());
         usuario.setRol(rol);
 
-        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+        UsuarioEntity usuarioGuardado = usuarioRepository.save(usuario);
         return mapToResponseDTO(usuarioGuardado);
     }
 
     @Override
     public List<UsuarioResponseDTO> listarUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<UsuarioEntity> usuarios = usuarioRepository.findAll();
         return usuarios.stream()
                 .map(this::mapToResponseDTO)
                 .toList();
@@ -57,16 +57,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioResponseDTO obtenerUsuarioPorId(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
+        UsuarioEntity usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return mapToResponseDTO(usuario);
     }
     
     @Override
     public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO requestDTO) {
-        Usuario usuario = usuarioRepository.findById(id)
+        UsuarioEntity usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Rol rol = rolRepository.findById(requestDTO.getRolId())
+        RolEntity rol = rolRepository.findById(requestDTO.getRolId())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
         usuario.setNombre(requestDTO.getNombre());
@@ -74,7 +74,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setPassword(requestDTO.getPassword());
         usuario.setRol(rol);
 
-        Usuario usuarioActualizado = usuarioRepository.save(usuario);
+        UsuarioEntity usuarioActualizado = usuarioRepository.save(usuario);
         return mapToResponseDTO(usuarioActualizado);
     }
 

@@ -1,28 +1,29 @@
 package usuario_service.usuario.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "usuarios")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Permiso {
+public class UsuarioEntity {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(unique = true)
     private String nombre;
-
-    @ManyToMany(mappedBy="permisos")
-    private Set<Rol> roles = new HashSet<>();
+    private String email;
+    private String password;
+    
+    @ManyToOne
+    @JoinColumn(name = "rol_id")
+    private RolEntity rol;
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import core_service.core_microservice.dto.ProductoRequestDTO;
 import core_service.core_microservice.dto.ProductoResponseDTO;
-import core_service.core_microservice.entity.Producto;
+import core_service.core_microservice.entity.ProductoEntity;
 
 public interface ProductoService {
     public ProductoResponseDTO crearProducto(ProductoRequestDTO dto);
@@ -12,5 +12,5 @@ public interface ProductoService {
     public ProductoResponseDTO obtenerProductoPorId(Long id);
     public ProductoResponseDTO actualizarProducto(Long id, ProductoRequestDTO dto);
     public void eliminarProducto(Long id);
-    public ProductoResponseDTO mapToResponseDTO(Producto producto);
+    public ProductoResponseDTO mapToResponseDTO(ProductoEntity producto);
 }
