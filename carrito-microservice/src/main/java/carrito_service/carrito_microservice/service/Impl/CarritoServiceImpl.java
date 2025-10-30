@@ -42,7 +42,6 @@ public class CarritoServiceImpl implements CarritoService {
         dto.setId(carrito.getId());
         dto.setUsuarioId(carrito.getUsuarioId());
         dto.setItems(carrito.getItems().stream().map(this::mapItemToResponseDTO).collect(Collectors.toList()));
-        dto.setTotal(carrito.getTotal());
         return dto;
     }
 
@@ -50,7 +49,7 @@ public class CarritoServiceImpl implements CarritoService {
     public CarritoResponseDTO obtenerOCrearCarrito(Long usuarioId) {
         CarritoEntity carrito = carritoRepository.findByUsuarioId(usuarioId)
                 .orElseGet(() ->
-                carritoRepository.save(new CarritoEntity(null, usuarioId, new Date(), new ArrayList<>(), 0.0)));
+                carritoRepository.save(new CarritoEntity(null, usuarioId, new Date(), new ArrayList<>())));
         return mapToResponseDTO(carrito);
     }
 
