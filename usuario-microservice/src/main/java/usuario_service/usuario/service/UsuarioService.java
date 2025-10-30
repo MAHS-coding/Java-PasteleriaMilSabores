@@ -3,6 +3,7 @@ package usuario_service.usuario.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import usuario_service.usuario.dto.RolDTO;
 import usuario_service.usuario.dto.UsuarioRequestDTO;
@@ -12,6 +13,7 @@ import usuario_service.usuario.entity.Usuario;
 import usuario_service.usuario.repository.RolRepository;
 import usuario_service.usuario.repository.UsuarioRepository;
 
+@Service
 public class UsuarioService {
 
     @Autowired
