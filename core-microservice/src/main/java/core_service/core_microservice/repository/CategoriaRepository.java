@@ -1,9 +1,11 @@
 package core_service.core_microservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import core_service.core_microservice.entity.CategoriaEntity;
 
+@Repository
 public interface CategoriaRepository extends JpaRepository<CategoriaEntity, Long> {
 
 }
