@@ -3,12 +3,14 @@ package core_service.core_microservice.service.Impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import core_service.core_microservice.dto.CategoriaDTO;
 import core_service.core_microservice.entity.Categoria;
 import core_service.core_microservice.repository.CategoriaRepository;
 import core_service.core_microservice.service.CategoriaService;
 
+@Service
 public class CategoriaServiceImpl implements CategoriaService{
     @Autowired
     private CategoriaRepository categoriaRepository;
