@@ -1,5 +1,13 @@
 package core_service.core_microservice.dto;
 
-public class ProductoRequestDTO {
+import lombok.Data;
 
+@Data
+public class ProductoRequestDTO {
+    private String nombre;
+    private String descripcion;
+    private Double precio;
+    private int stock;
+    private boolean disponible;
+    private Long categoriaId;
 }

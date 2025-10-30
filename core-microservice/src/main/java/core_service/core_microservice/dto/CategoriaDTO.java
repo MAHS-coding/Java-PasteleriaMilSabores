@@ -1,5 +1,10 @@
 package core_service.core_microservice.dto;
 
-public class CategoriaDTO {
+import lombok.Data;
 
+@Data
+public class CategoriaDTO {
+    private Long id;
+    private String nombre;
+    private String descripcion;
 }
