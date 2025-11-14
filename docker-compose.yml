@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  usuario:
+    image: ${REGISTRY:-milsabores}/usuario:latest
+    build:
+      context: ./usuario-microservice
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+
+  core:
+    image: ${REGISTRY:-milsabores}/core:latest
+    build:
+      context: ./core-microservice
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+
+  carrito:
+    image: ${REGISTRY:-milsabores}/carrito:latest
+    build:
+      context: ./carrito-microservice
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+
+networks:
+  default:
+    driver: overlay
+
+# Notes:
+# - Use `docker swarm init` and then `docker stack deploy -c docker-compose.yml milsabores` to deploy.
+# - Set REGISTRY env to point to your registry (e.g. <aws_account>.dkr.ecr.<region>.amazonaws.com/milsabores)
