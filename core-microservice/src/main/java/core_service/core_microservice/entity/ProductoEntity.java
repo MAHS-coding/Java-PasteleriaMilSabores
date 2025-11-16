@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,4 +32,12 @@ public class ProductoEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_id")
     private CategoriaEntity categoria;
+    
+    // Campos adicionales del JSON
+    private String codigo;
+    private String imagen;
+    private Integer stockCritico;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<core_service.core_microservice.entity.RatingEntity> ratings = new java.util.ArrayList<>();
 }

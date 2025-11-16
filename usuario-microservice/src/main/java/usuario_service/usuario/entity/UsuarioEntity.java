@@ -27,4 +27,11 @@ public class UsuarioEntity {
     @ManyToOne
     @JoinColumn(name = "rol_id")
     private RolEntity rol;
+
+    // Campos adicionales del JSON
+    private String run;
+    private java.time.LocalDate fechaNacimiento;
+
+    @jakarta.persistence.OneToMany(mappedBy = "usuario", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<DireccionEntity> addresses = new java.util.ArrayList<>();
 }
