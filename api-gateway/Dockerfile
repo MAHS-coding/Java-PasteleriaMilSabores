@@ -1,5 +1,6 @@
-# Usamos una imagen base ligera de Java 17
-FROM openjdk:17-jdk-slim
+# Usamos una imagen base ligera y estable de Java 17
+# Cambiado a Eclipse Temurin Alpine para compatibilidad y menor tamaño
+FROM eclipse-temurin:17-jdk-alpine
 
 # Añadimos un volumen temporal
 VOLUME /tmp
