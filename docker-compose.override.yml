@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  usuario:
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/bd_usuarios_pasteleria
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET:-ChangeThisSecretToAStrongRandomValue}
+      - SPRING_FLYWAY_ENABLED=false
+
+  core:
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/bd_core_pasteleria
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET:-ChangeThisSecretToAStrongRandomValue}
+      - SPRING_FLYWAY_ENABLED=false
+
+  carrito:
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/bd_carrito_pasteleria
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET:-ChangeThisSecretToAStrongRandomValue}
+      - SPRING_FLYWAY_ENABLED=false

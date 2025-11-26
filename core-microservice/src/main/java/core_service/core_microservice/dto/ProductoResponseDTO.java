@@ -11,4 +11,7 @@ public class ProductoResponseDTO {
     private int stock;
     private boolean disponible;
     private Long categoriaId;
+    private String codigo;
+    private String imagen;
+    private Integer stockCritico;
 }

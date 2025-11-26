@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import core_service.core_microservice.dto.CategoriaDTO;
+import core_service.core_microservice.entity.CategoriaEntity;
+import core_service.core_microservice.repository.CategoriaRepository;
 import core_service.core_microservice.dto.ProductoRequestDTO;
 import core_service.core_microservice.dto.ProductoResponseDTO;
 import core_service.core_microservice.entity.ProductoEntity;
@@ -17,6 +19,9 @@ public class ProductoServiceImpl implements ProductoService{
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
     @Override
     public ProductoResponseDTO mapToResponseDTO(ProductoEntity producto) {
         ProductoResponseDTO dto = new ProductoResponseDTO();
@@ -24,7 +29,10 @@ public class ProductoServiceImpl implements ProductoService{
         dto.setNombre(producto.getNombre());
         dto.setDescripcion(producto.getDescripcion());
         dto.setPrecio(producto.getPrecio());
-        dto.setCategoriaId(producto.getCategoria().getId());
+        dto.setCategoriaId(producto.getCategoria() != null ? producto.getCategoria().getId() : null);
+        dto.setCodigo(producto.getCodigo());
+        dto.setImagen(producto.getImagen());
+        dto.setStockCritico(producto.getStockCritico());
         return dto;
     }
 
@@ -34,10 +42,15 @@ public class ProductoServiceImpl implements ProductoService{
         producto.setNombre(dto.getNombre());
         producto.setDescripcion(dto.getDescripcion());
         producto.setPrecio(dto.getPrecio());
-        
-        CategoriaDTO categoria = new CategoriaDTO();
-        categoria.setId(dto.getCategoriaId());
-        producto.setCategoria(producto.getCategoria());
+        producto.setStock(dto.getStock());
+        producto.setDisponible(dto.isDisponible());
+        producto.setCodigo(dto.getCodigo());
+        producto.setImagen(dto.getImagen());
+        producto.setStockCritico(dto.getStockCritico());
+        if (dto.getCategoriaId() != null) {
+            CategoriaEntity cat = categoriaRepository.findById(dto.getCategoriaId()).orElse(null);
+            producto.setCategoria(cat);
+        }
         ProductoEntity productoGuardado = productoRepository.save(producto);
         return mapToResponseDTO(productoGuardado);
     }
@@ -60,6 +73,15 @@ public class ProductoServiceImpl implements ProductoService{
         producto.setNombre(dto.getNombre());
         producto.setDescripcion(dto.getDescripcion());
         producto.setPrecio(dto.getPrecio());
+        producto.setStock(dto.getStock());
+        producto.setDisponible(dto.isDisponible());
+        producto.setCodigo(dto.getCodigo());
+        producto.setImagen(dto.getImagen());
+        producto.setStockCritico(dto.getStockCritico());
+        if (dto.getCategoriaId() != null) {
+            CategoriaEntity cat = categoriaRepository.findById(dto.getCategoriaId()).orElse(null);
+            producto.setCategoria(cat);
+        }
         ProductoEntity productoActualizado = productoRepository.save(producto);
         return mapToResponseDTO(productoActualizado);
     }

@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+  gateway:
+    routes:
+      - id: auth_route
+        uri: http://micro-usuarios:8080
+        predicates:
+          - Path=/auth/**
+        filters:
+          - StripPrefix=1
+
+      - id: productos_route
+        uri: http://micro-core:8081
+        predicates:
+          - Path=/api/productos/**
+        filters:
+          - StripPrefix=2
+
+      - id: carrito_route
+        uri: http://micro-carrito:8082
+        predicates:
+          - Path=/api/carrito/**
+        filters:
+          - StripPrefix=2
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWT_JWK_SET_URI:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+eureka:
+  client:
+    enabled: false
