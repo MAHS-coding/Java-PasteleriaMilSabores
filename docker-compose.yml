@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   usuario:
-    image: ${REGISTRY:-milsabores}/usuario:latest
+    image: ${DOCKER_USERNAME}/usuario:latest
     build:
       context: ./usuario-microservice
       dockerfile: Dockerfile
@@ -17,7 +17,7 @@ services:
           memory: 512M
 
   core:
-    image: ${REGISTRY:-milsabores}/core:latest
+    image: ${DOCKER_USERNAME}/core:latest
     build:
       context: ./core-microservice
       dockerfile: Dockerfile
@@ -33,7 +33,7 @@ services:
           memory: 512M
 
   carrito:
-    image: ${REGISTRY:-milsabores}/carrito:latest
+    image: ${DOCKER_USERNAME}/carrito:latest
     build:
       context: ./carrito-microservice
       dockerfile: Dockerfile
@@ -52,6 +52,23 @@ networks:
   default:
     driver: overlay
 
+# api-gateway service added for unified entry point
+  api-gateway:
+    image: ${DOCKER_USERNAME}/api-gateway:latest
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+
 # Notes:
-# - Use `docker swarm init` and then `docker stack deploy -c docker-compose.yml milsabores` to deploy.
-# - Set REGISTRY env to point to your registry (e.g. <aws_account>.dkr.ecr.<region>.amazonaws.com/milsabores)
+# - Use `docker swarm init` and then `docker stack deploy -c docker-compose.yml pasteleria --with-registry-auth` to deploy.
+# - This compose references `${DOCKER_USERNAME}`. The GitHub Actions workflow replaces the placeholder with your Docker Hub username before copying to the remote host.
