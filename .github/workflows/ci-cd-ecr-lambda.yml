@@ -37,9 +37,9 @@ jobs:
             if [ -d "$m" ]; then
               echo "Building module: $m"
               if [ -f "$m/mvnw" ]; then
-                (cd "$m" && ./mvnw -B -V -ntp -T 1C clean package -DskipTests=false)
+                (cd "$m" && ./mvnw -B -V -ntp -T 1C clean package -DskipTests)
               else
-                (cd "$m" && mvn -B -V -ntp -T 1C clean package -DskipTests=false)
+                (cd "$m" && mvn -B -V -ntp -T 1C clean package -DskipTests)
               fi
             else
               echo "Skipping missing module: $m"
@@ -75,7 +75,12 @@ jobs:
 
       - name: Build Lambda (process-sqs)
         working-directory: lambda/process-sqs
-        run: mvn -B -V -ntp -T 1C clean package
+        run: |
+          if [ -f ./mvnw ]; then
+            ./mvnw -B -V -ntp -T 1C clean package -DskipTests
+          else
+            mvn -B -V -ntp -T 1C clean package -DskipTests
+          fi
 
       - name: Upload Lambda jar to S3
         env:
