@@ -23,7 +23,21 @@ jobs:
           cache: maven
 
       - name: Build Java modules (package jars)
-        run: mvn -B -V -ntp -T 1C clean package -DskipTests=false
+        run: |
+          set -e
+          MODULES=("usuario-microservice" "core-microservice" "carrito-microservice" "api-gateway")
+          for m in "${MODULES[@]}"; do
+            if [ -d "$m" ]; then
+              echo "Building module: $m"
+              if [ -f "$m/mvnw" ]; then
+                (cd "$m" && ./mvnw -B -V -ntp -T 1C clean package -DskipTests=false)
+              else
+                (cd "$m" && mvn -B -V -ntp -T 1C clean package -DskipTests=false)
+              fi
+            else
+              echo "Skipping missing module: $m"
+            fi
+          done
 
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
