@@ -107,10 +107,23 @@ jobs:
         run: |
           sed "s/\${DOCKER_USERNAME}/${{ secrets.DOCKER_USERNAME }}/g" docker-compose.yml > docker-compose.remote.yml
 
-      - name: Start SSH agent and add key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Start SSH agent and add key (manual, sanitized)
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          echo "Preparing SSH key..."
+          mkdir -p ~/.ssh
+          # Remove Windows CRLF and write the key safely
+          printf "%s" "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "Starting ssh-agent..."
+          eval "$(ssh-agent -s)"
+          # Try to add key; this will fail if the key is passphrase-protected
+          ssh-add ~/.ssh/deploy_key
+          echo "SSH keys loaded:" 
+          ssh-add -l || true
+        shell: bash
 
       - name: Copy docker-compose to remote
         run: |
