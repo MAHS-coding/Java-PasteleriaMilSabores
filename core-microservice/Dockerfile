@@ -3,7 +3,8 @@ FROM maven:3.9.4-eclipse-temurin-17 AS builder
 WORKDIR /workspace
 COPY pom.xml mvnw .mvn/ ./
 COPY src ./src
-RUN mvn -B -DskipTests package -DskipTests
+# Use the project wrapper if present; skip tests to avoid running unit tests during image build
+RUN if [ -f ./mvnw ]; then ./mvnw -B -DskipTests package; else mvn -B -DskipTests package; fi
 
 FROM eclipse-temurin:17-jre-jammy
 LABEL maintainer="MAHS-coding <you@example.com>"
