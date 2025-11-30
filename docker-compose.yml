@@ -32,10 +32,14 @@ services:
         condition: on-failure
       resources:
         limits:
-          cpus: '0.50'
-          memory: 512M
+          cpus: '1.0'
+          memory: 1G
     networks:
       - pasteleria-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/milsabores
+      SPRING_DATASOURCE_USERNAME: milsabores
+      SPRING_DATASOURCE_PASSWORD: milsaborespass
 
   micro-usuario:
     image: ${DOCKER_USERNAME}/usuario:latest
@@ -50,10 +54,14 @@ services:
         condition: on-failure
       resources:
         limits:
-          cpus: '0.50'
-          memory: 512M
+          cpus: '1.0'
+          memory: 1G
     networks:
       - pasteleria-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/milsabores
+      SPRING_DATASOURCE_USERNAME: milsabores
+      SPRING_DATASOURCE_PASSWORD: milsaborespass
 
   micro-carrito:
     image: ${DOCKER_USERNAME}/carrito:latest
@@ -68,18 +76,22 @@ services:
         condition: on-failure
       resources:
         limits:
-          cpus: '0.50'
-          memory: 512M
+          cpus: '1.0'
+          memory: 1G
     networks:
       - pasteleria-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/milsabores
+      SPRING_DATASOURCE_USERNAME: milsabores
+      SPRING_DATASOURCE_PASSWORD: milsaborespass
 
   mysqldb:
     image: mariadb:10.6
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-root}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE:-milsabores}"
-      MYSQL_USER: "${MYSQL_USER:-milsabores}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-milsaborespass}"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "milsabores"
+      MYSQL_USER: "milsabores"
+      MYSQL_PASSWORD: "milsaborespass"
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -87,6 +99,10 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
     networks:
       - pasteleria-net
 
