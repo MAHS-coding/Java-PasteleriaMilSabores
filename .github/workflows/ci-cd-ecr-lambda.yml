@@ -51,10 +51,27 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: us-east-1
 
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Prepare ECR registry and repo prefix
+        run: |
+          set -euo pipefail
+          # Compose registry host from account and region
+          REGISTRY="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com"
+          # Sanitize REPO prefix to avoid leading/trailing slashes
+          REPO_PREFIX="${{ env.ECR_REPOSITORY_PREFIX }}"
+          REPO_PREFIX="$(echo "$REPO_PREFIX" | sed 's#^/*##; s#/*$##')"
+          if [ -n "$REPO_PREFIX" ]; then
+            REPO_PREFIX="$REPO_PREFIX/"
+          else
+            REPO_PREFIX=""
+          fi
+          echo "ECR_REGISTRY=$REGISTRY" >> $GITHUB_ENV
+          echo "ECR_REPO_PREFIX=$REPO_PREFIX" >> $GITHUB_ENV
+        shell: bash
 
       - name: Build and push carrito image
         uses: docker/build-push-action@v4
@@ -62,7 +79,7 @@ jobs:
           context: ./carrito-microservice
           file: ./carrito-microservice/Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY_PREFIX }}/carrito:latest
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_PREFIX }}carrito:latest
 
       - name: Build and push core image
         uses: docker/build-push-action@v4
@@ -70,7 +87,7 @@ jobs:
           context: ./core-microservice
           file: ./core-microservice/Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY_PREFIX }}/core:latest
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_PREFIX }}core:latest
 
       - name: Build and push usuario image
         uses: docker/build-push-action@v4
@@ -78,7 +95,7 @@ jobs:
           context: ./usuario-microservice
           file: ./usuario-microservice/Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY_PREFIX }}/usuario:latest
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO_PREFIX }}usuario:latest
 
       - name: Build Lambda (process-sqs)
         working-directory: lambda/process-sqs
