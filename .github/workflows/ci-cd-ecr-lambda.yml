@@ -182,5 +182,5 @@ jobs:
             aws lambda create-event-source-mapping --function-name $LAMBDA_NAME --event-source-arn $QUEUE_ARN --batch-size 10 --enabled
           else
             echo "Updating existing event source mapping: $MAPPING_ID"
-            aws lambda update-event-source-mapping --uuid $MAPPING_ID --enabled true --batch-size 10
+            aws lambda update-event-source-mapping --uuid $MAPPING_ID --enabled --batch-size 10
           fi
