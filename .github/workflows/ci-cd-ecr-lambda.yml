@@ -129,9 +129,9 @@ jobs:
 
       - name: Ensure ECR repositories exist
         run: |
-          aws ecr describe-repositories --repository-names "${{ env.ECR_REPOSITORY_PREFIX }}/carrito" || aws ecr create-repository --repository-name "${{ env.ECR_REPOSITORY_PREFIX }}/carrito"
-          aws ecr describe-repositories --repository-names "${{ env.ECR_REPOSITORY_PREFIX }}/core" || aws ecr create-repository --repository-name "${{ env.ECR_REPOSITORY_PREFIX }}/core"
-          aws ecr describe-repositories --repository-names "${{ env.ECR_REPOSITORY_PREFIX }}/usuario" || aws ecr create-repository --repository-name "${{ env.ECR_REPOSITORY_PREFIX }}/usuario"
+          aws ecr describe-repositories --repository-names "carrito" || aws ecr create-repository --repository-name "carrito"
+          aws ecr describe-repositories --repository-names "core" || aws ecr create-repository --repository-name "core"
+          aws ecr describe-repositories --repository-names "usuario" || aws ecr create-repository --repository-name "usuario"
 
       - name: Create SQS queue
         id: create_sqs
